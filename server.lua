@@ -1,46 +1,58 @@
--- Get the name of the resource (e.g., "my_hud")
+-- Hole den Namen der Resource
 local resourceName = GetCurrentResourceName()
 
--- Get the current version from the fxmanifest.lua
+-- Hole die aktuelle Version aus der fxmanifest.lua
 local currentVersion = GetResourceMetadata(resourceName, 'version', 0)
 
--- IMPORTANT: Put the RAW link to your version.txt on GitHub here!
--- Example: "https://raw.githubusercontent.com/YourName/YourRepo/main/version.txt"
-local githubRawUrl = "https://raw.githubusercontent.com/vBerryX/berryHud/refs/heads/main/version.txt?token=GHSAT0AAAAAADZGCS7QZWAOOVLQBRXGA3OS2OQIBLQ"
+-- WICHTIG: Hier kommt der RAW Link zu deiner version.json auf GitHub rein!
+local githubRawUrl = "https://raw.githubusercontent.com/DEIN_GITHUB_NAME/DEIN_REPO_NAME/main/version.json"
 
 Citizen.CreateThread(function()
-    -- We wait 2 seconds to let the server boot up properly
+    -- Wir warten 2 Sekunden, damit der Server in Ruhe hochfahren kann
     Citizen.Wait(2000)
 
-    -- If there's no version in the fxmanifest, we abort
+    -- Wenn in der fxmanifest keine Version steht, brechen wir ab
     if currentVersion == nil then
-        print("^1[ERROR]^7 No version found in fxmanifest.lua!")
+        print("^1[FEHLER]^7 Keine Version in der fxmanifest.lua gefunden!")
         return
     end
 
-    -- Send the request to GitHub
+    -- Sende die Anfrage an GitHub
     PerformHttpRequest(githubRawUrl, function(errorCode, resultData, resultHeaders)
-        -- Error fetching data (e.g., no internet or wrong link)
+        -- Fehler beim Abrufen
         if errorCode ~= 200 then
-            print("^1[" .. resourceName .. "]^7 Could not reach the update server. (HTTP " .. tostring(errorCode) .. ")")
+            print("^1[" .. resourceName .. "]^7 Konnte Update-Server nicht erreichen. (HTTP " .. tostring(errorCode) .. ")")
             return
         end
 
-        -- Remove invisible characters (like line breaks) from both versions
-        local latestVersion = resultData:gsub("%s+", "")
-        local current = currentVersion:gsub("%s+", "")
+        -- NEU: Wir wandeln den Text aus GitHub in eine lesbare Lua-Tabelle um
+        local data = json.decode(resultData)
 
-        -- Compare versions
-        if latestVersion ~= current then
-            print("\n^3-------------------------------------------------------------------^7")
-            print("^1[UPDATE AVAILABLE] ^7- ^5" .. resourceName .. "^7")
-            print("A new update is available on GitHub!")
-            print("Current Version: ^1" .. current .. "^7")
-            print("Latest Version:  ^2" .. latestVersion .. "^7")
-            print("^3Please download the newest version to avoid bugs.^7")
-            print("^3-------------------------------------------------------------------\n^7")
+        -- Prüfen, ob das JSON erfolgreich gelesen wurde und eine Version enthält
+        if data and data.version then
+            local latestVersion = data.version:gsub("%s+", "")
+            local current = currentVersion:gsub("%s+", "")
+
+            -- Vergleichen
+            if latestVersion ~= current then
+                print("\n^3-------------------------------------------------------------------^7")
+                print("^1[UPDATE VERFÜGBAR] ^7- ^5" .. resourceName .. "^7")
+                print("Ein neues Update ist auf GitHub verfuegbar!")
+                print("Aktuelle Version: ^1" .. current .. "^7")
+                print("Neueste Version:  ^2" .. latestVersion .. "^7")
+                
+                -- NEU: Wenn du "notes" im JSON hast, werden sie hier angezeigt!
+                if data.notes then
+                    print("Patchnotes: ^6" .. data.notes .. "^7")
+                end
+                
+                print("^3Bitte lade die neue Version herunter, um Bugs zu vermeiden.^7")
+                print("^3-------------------------------------------------------------------\n^7")
+            else
+                print("^2[" .. resourceName .. "]^7 Version ^2" .. current .. "^7 ist auf dem neuesten Stand!")
+            end
         else
-            print("^2[" .. resourceName .. "]^7 Version ^2" .. current .. "^7 is up to date!")
+            print("^1[" .. resourceName .. "]^7 Fehler: Konnte version.json nicht richtig lesen!")
         end
     end, "GET", "", "")
 end)
