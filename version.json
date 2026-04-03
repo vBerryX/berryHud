@@ -1,4 +1,9 @@
 {
+<<<<<<< HEAD
   "version": "1.1",
   "notes": "Stamina und Sauerstoff Ringe hinzugefuegt!"
+=======
+  "version": "1.1.0",
+  "notes": "fixes"
+>>>>>>> c6de96d840f5ad6172b67fc36781e086e22fe702
 }
