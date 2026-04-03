@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div id="hud-container" class="draggable">
+        <div id="player-id-badge"><span data-trans="id">ID:</span> <span id="player-id">0</span></div>
+        <div class="status-wrapper">
+            <div class="stat-circle"><svg width="50" height="50"><circle class="bg" cx="25" cy="25" r="20"/><circle class="prog" id="health-prog" cx="25" cy="25" r="20"/></svg><i class="fas fa-heart"></i></div>
+            <div class="stat-circle"><svg width="50" height="50"><circle class="bg" cx="25" cy="25" r="20"/><circle class="prog" id="armor-prog" cx="25" cy="25" r="20"/></svg><i class="fas fa-shield-alt"></i></div>
+            <div class="stat-circle"><svg width="50" height="50"><circle class="bg" cx="25" cy="25" r="20"/><circle class="prog" id="hunger-prog" cx="25" cy="25" r="20"/></svg><i class="fas fa-utensils"></i></div>
+            <div class="stat-circle"><svg width="50" height="50"><circle class="bg" cx="25" cy="25" r="20"/><circle class="prog" id="thirst-prog" cx="25" cy="25" r="20"/></svg><i class="fas fa-tint"></i></div>
+            
+            <div class="stat-circle" id="stamina-circle" style="display: none;"><svg width="50" height="50"><circle class="bg" cx="25" cy="25" r="20"/><circle class="prog" id="stamina-prog" cx="25" cy="25" r="20"/></svg><i class="fas fa-running"></i></div>
+            <div class="stat-circle" id="oxygen-circle" style="display: none;"><svg width="50" height="50"><circle class="bg" cx="25" cy="25" r="20"/><circle class="prog" id="oxygen-prog" cx="25" cy="25" r="20"/></svg><i class="fas fa-lungs"></i></div>
+        </div>
+    </div>
+
+    <div id="money-container" class="draggable">
+        <div class="money-wrapper" id="cash-wrapper">
+            <i class="fas fa-wallet" id="wallet-icon"></i>
+            <span id="cash-amount">0</span><span class="currency">$</span>
+        </div>
+    </div>
+
+    <div id="bank-container" class="draggable">
+        <div class="money-wrapper" id="bank-wrapper">
+            <i class="fas fa-credit-card" id="bank-icon"></i>
+            <span id="bank-amount">0</span><span class="currency">$</span>
+        </div>
+    </div>
+
+    <div id="speedo-container" class="draggable" style="display: none;">
+        <div class="speedo-wrapper">
+            <div class="speed-gauge">
+                <svg width="120" height="120"><circle class="bg" cx="60" cy="60" r="54"/><circle class="prog" id="speed-prog" cx="60" cy="60" r="54"/></svg>
+                <div class="speed-text"><span id="speed">000</span><span class="unit">KM/H</span></div>
+            </div>
+            <div id="fuel-gauge-container" class="fuel-gauge">
+                <svg width="50" height="50"><circle class="bg" cx="25" cy="25" r="20"/><circle class="prog" id="fuel-prog" cx="25" cy="25" r="20"/></svg>
+                <i class="fas fa-gas-pump"></i>
+            </div>
+        </div>
+    </div>
+
+    <div id="config-menu" style="display: none;">
+        <div class="menu-header"><h3 data-trans="hud_settings">HUD EINSTELLUNGEN</h3></div>
+
+        <div class="tab-wrapper">
+            <button class="tab-btn active" onclick="openTab('general')" data-trans="general">Allgemein</button>
+            <button class="tab-btn" onclick="openTab('position')" data-trans="position">Position</button>
+            <button class="tab-btn" onclick="openTab('colors')" data-trans="colors">Farben</button>
+        </div>
+
+        <div id="general" class="tab-content active">
+            <div class="option-row" id="row-toggle-cash"><div class="opt-info"><i class="fas fa-wallet"></i> <span data-trans="cash_display">Geldanzeige</span></div><label class="switch"><input type="checkbox" id="toggle-cash" checked><span class="slider"></span></label></div>
+            <div class="option-row" id="row-toggle-bank"><div class="opt-info"><i class="fas fa-credit-card"></i> <span data-trans="bank_display">Bankanzeige</span></div><label class="switch"><input type="checkbox" id="toggle-bank" checked><span class="slider"></span></label></div>
+            <div class="option-row" id="row-toggle-fuel"><div class="opt-info"><i class="fas fa-gas-pump"></i> <span data-trans="fuel_display">Tankanzeige</span></div><label class="switch"><input type="checkbox" id="toggle-fuel" checked><span class="slider"></span></label></div>
+            <div class="option-row" id="row-toggle-stamina"><div class="opt-info"><i class="fas fa-running"></i> <span data-trans="stamina_display">Ausdaueranzeige</span></div><label class="switch"><input type="checkbox" id="toggle-stamina" checked><span class="slider"></span></label></div>
+            <div class="option-row" id="row-toggle-oxygen"><div class="opt-info"><i class="fas fa-lungs"></i> <span data-trans="oxygen_display">Sauerstoffanzeige</span></div><label class="switch"><input type="checkbox" id="toggle-oxygen" checked><span class="slider"></span></label></div>
+            
+            <div class="range-container">
+                <div class="range-header"><span data-trans="hud_scale">HUD Skalierung</span><span class="val-badge" id="hud-scale-val">1.0</span></div>
+                <input type="range" id="hud-scale" min="0.5" max="1.5" step="0.05" value="1.0">
+            </div>
+        </div>
+
+        <div id="position" class="tab-content">
+            <div class="pos-block"><h4 data-trans="status_hud">Status HUD</h4><div class="range-grid"><div class="range-item"><span>X <span class="val-badge" id="hud-x-val">95</span></span><input type="range" id="hud-x"></div><div class="range-item"><span>Y <span class="val-badge" id="hud-y-val">5</span></span><input type="range" id="hud-y"></div></div></div>
+            <div class="pos-block" id="block-pos-cash"><h4 data-trans="cash">Bargeld</h4><div class="range-grid"><div class="range-item"><span>X <span class="val-badge" id="money-x-val">95</span></span><input type="range" id="money-x"></div><div class="range-item"><span>Y <span class="val-badge" id="money-y-val">15</span></span><input type="range" id="money-y"></div></div></div>
+            <div class="pos-block" id="block-pos-bank"><h4 data-trans="bank">Bankkonto</h4><div class="range-grid"><div class="range-item"><span>X <span class="val-badge" id="bank-x-val">95</span></span><input type="range" id="bank-x"></div><div class="range-item"><span>Y <span class="val-badge" id="bank-y-val">22</span></span><input type="range" id="bank-y"></div></div></div>
+            <div class="pos-block"><h4 data-trans="speedo">Tacho</h4><div class="range-grid"><div class="range-item"><span>X <span class="val-badge" id="speedo-x-val">95</span></span><input type="range" id="speedo-x"></div><div class="range-item"><span>Y <span class="val-badge" id="speedo-y-val">95</span></span><input type="range" id="speedo-y"></div></div></div>
+        </div>
+
+        <div id="colors" class="tab-content">
+            <div class="color-list">
+                <div class="color-item"><span data-trans="health">Leben</span><input type="color" id="color-health"></div>
+                <div class="color-item"><span data-trans="armor">Schutz</span><input type="color" id="color-armor"></div>
+                <div class="color-item"><span data-trans="hunger">Hunger</span><input type="color" id="color-hunger"></div>
+                <div class="color-item"><span data-trans="thirst">Durst</span><input type="color" id="color-thirst"></div>
+                <div class="color-item" id="row-color-stamina"><span data-trans="stamina">Ausdauer</span><input type="color" id="color-stamina"></div>
+                <div class="color-item" id="row-color-oxygen"><span data-trans="oxygen">Sauerstoff</span><input type="color" id="color-oxygen"></div>
+                <div class="color-item" id="row-color-cash"><span data-trans="cash">Bargeld</span><input type="color" id="color-money"></div>
+                <div class="color-item" id="row-color-bank"><span data-trans="bank">Bankkonto</span><input type="color" id="color-bank"></div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="close-btn" data-trans="save">SPEICHERN</button>
+            <button id="reset-btn" onclick="resetHUD()" data-trans="reset">Standardwerte wiederherstellen</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
