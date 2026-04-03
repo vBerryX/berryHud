@@ -11,14 +11,12 @@ Citizen.CreateThread(function()
     Citizen.Wait(2000)
 
     if currentVersion == nil then
-        print("^1[ERROR]^7 No version found in fxmanifest.lua!")
+        print("^1[ERROR]^7 Keine Version in der fxmanifest.lua gefunden!")
         return
     end
 
-    -- NEU: Der Cache-Buster! Umgeht die 5-Minuten-Sperre von GitHub
     local cacheBusterUrl = githubRawUrl .. "?nocache=" .. os.time()
 
-    -- Send the request to GitHub (jetzt mit der neuen URL)
     PerformHttpRequest(cacheBusterUrl, function(errorCode, resultData, resultHeaders)
         if errorCode ~= 200 then
             print("^1[" .. resourceName .. "]^7 Could not reach the update server. (HTTP " .. tostring(errorCode) .. ")")
@@ -30,6 +28,9 @@ Citizen.CreateThread(function()
         if data and data.version then
             local latestVersion = data.version:gsub("%s+", "")
             local current = currentVersion:gsub("%s+", "")
+
+            -- DEBUG: Das zeigt dir genau, was das Script vergleicht!
+            --print("^8[DEBUG] Lokal: '" .. current .. "' | GitHub: '" .. latestVersion .. "'^7")
 
             if latestVersion ~= current then
                 print("\n^3-------------------------------------------------------------------^7")
