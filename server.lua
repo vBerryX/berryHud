@@ -6,7 +6,7 @@ local currentVersion = GetResourceMetadata(resourceName, 'version', 0)
 
 -- IMPORTANT: Put the RAW link to your version.txt on GitHub here!
 -- Example: "https://raw.githubusercontent.com/YourName/YourRepo/main/version.txt"
-local githubRawUrl = "https://raw.githubusercontent.com/YOUR_GITHUB_NAME/YOUR_REPO_NAME/main/version.txt"
+local githubRawUrl = "https://raw.githubusercontent.com/vBerryX/berryHud/refs/heads/main/version.txt?token=GHSAT0AAAAAADZGCS7QZWAOOVLQBRXGA3OS2OQIBLQ"
 
 Citizen.CreateThread(function()
     -- We wait 2 seconds to let the server boot up properly
