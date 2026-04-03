@@ -2,6 +2,12 @@
 
 A modern, highly customizable, and lightweight HUD for FiveM ESX servers. Designed with a sleek **Glassmorphism** aesthetic, this HUD keeps the player's screen clean while offering maximum functionality. 
 
+
+![My_HUD Showcase](https://github.com/user-attachments/assets/294bc587-42ea-4729-90b3-9c8f29d3a6cc)
+![My_HUD Showcase](https://github.com/user-attachments/assets/0cb3f103-2d83-4005-a4ad-57baf7d25f34)
+
+
+
 ## ✨ Features
 
 * **🎨 Ingame Editor (`/hud`):** Players can customize their HUD layout completely.
