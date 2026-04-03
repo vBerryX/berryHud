@@ -16,6 +16,10 @@ client_scripts {
     'client.lua'
 }
 
+server_scripts {
+    'server.lua'
+}
+
 files {
     'html/ui.html',
     'html/style.css',
