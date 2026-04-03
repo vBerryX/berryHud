@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'vBerryX'
 description 'berryHUD'
-version '1.0.0'
+version '1.1'
 
 ui_page 'html/ui.html'
 
