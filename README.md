@@ -35,7 +35,7 @@ A modern, highly customizable, and lightweight HUD for FiveM ESX servers. Design
 ## ⚙️ Installation
 
 1. Download the latest version from the [Releases](../../releases) tab or clone the repository.
-2. Extract the folder into your server's `resources` directory and rename it to `my_hud` (or your preferred name).
+2. Extract the folder into your server's `resources` directory and rename it to `berryHud` (or your preferred name).
 3. Open your `server.cfg` and add the following line:
    ensure berryHud
 4. (Optional) Open the config.lua to adjust default colors, scale, language ('en' or 'de'), and global feature toggles.
