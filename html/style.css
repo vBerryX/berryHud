@@ -9,7 +9,18 @@
     --hud-scale: 1.0;
 }
 
-body { margin: 0; overflow: hidden; font-family: 'Inter', sans-serif; color: white; user-select: none; background: transparent; }
+body { 
+    margin: 0; 
+    overflow: hidden; 
+    font-family: 'Inter', sans-serif; 
+    color: white; 
+    user-select: none; 
+    background: transparent; 
+    
+    /* NEU: Macht das HUD beim Joinen standardmäßig unsichtbar */
+    opacity: 0; 
+    transition: opacity 0.5s ease-in-out; 
+}
 
 /* HUD ELEMENTS */
 .draggable { position: absolute; pointer-events: none; display: flex; transform: translate(-100%, 0) scale(var(--hud-scale)); transform-origin: top right; }

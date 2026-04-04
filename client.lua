@@ -136,20 +136,84 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Versteckt das komplette HUD, wenn das Pause-Menü (ESC) offen ist
+-- ==========================================
+-- SICHBARKEITS-SYSTEM (Multichar & Pause Menu)
+-- ==========================================
+
+local isPlayerLoaded = false
+local isHUDVisible = false
+
+-- Wird von ESX aufgerufen, wenn der Spieler spawnt (z.B. nach Multichar)
+RegisterNetEvent('esx:playerLoaded')
+AddEventHandler('esx:playerLoaded', function(xPlayer)
+    isPlayerLoaded = true
+end)
+
+-- Wird von ESX aufgerufen, wenn der Spieler den Charakter wechselt
+RegisterNetEvent('esx:onPlayerLogout')
+AddEventHandler('esx:onPlayerLogout', function()
+    isPlayerLoaded = false
+end)
+
+-- Fallback: Falls du das Script im laufenden Betrieb neu startest
 Citizen.CreateThread(function()
-    local isPaused = false
+    Citizen.Wait(1000)
+    if ESX.GetPlayerData().job ~= nil then
+        isPlayerLoaded = true
+    end
+end)
+
+-- Main Visibility Loop (Prüft Pause-Menu & Lade-Status)
+Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(300) -- Prüft alle 300ms (reicht völlig aus und spart Performance)
+        Citizen.Wait(200) -- Prüft alle 200ms
         
-        local currentlyPaused = IsPauseMenuActive()
+        local shouldBeVisible = false
         
-        if currentlyPaused and not isPaused then
-            isPaused = true
-            SendNUIMessage({ type = "toggleHUD", show = false })
-        elseif not currentlyPaused and isPaused then
-            isPaused = false
+        -- Das HUD soll nur sichtbar sein, wenn der Spieler geladen ist UND das Menü zu ist
+        if isPlayerLoaded and not IsPauseMenuActive() then
+            shouldBeVisible = true
+        end
+        
+        -- Befehl ans UI senden, wenn sich der Status ändert
+        if shouldBeVisible and not isHUDVisible then
+            isHUDVisible = true
             SendNUIMessage({ type = "toggleHUD", show = true })
+        elseif not shouldBeVisible and isHUDVisible then
+            isHUDVisible = false
+            SendNUIMessage({ type = "toggleHUD", show = false })
+        end
+    end
+end)
+
+-- ==========================================
+-- KOMMANDOS & NOTFALL SYSTEME
+-- ==========================================
+
+RegisterCommand('hud', function()
+    -- Verhindert das Öffnen des Editors im Ladescreen
+    if isPlayerLoaded then
+        SetNuiFocus(true, true)
+        SendNUIMessage({type = "openConfig"})
+    end
+end)
+
+RegisterNUICallback('closeConfig', function(data, cb)
+    SetNuiFocus(false, false)
+    cb('ok')
+end)
+
+-- Anti-Stuck Notfall System (ESC drücken = Menü zu)
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+        if IsNuiFocused() then
+            if IsControlJustReleased(0, 322) or IsControlJustReleased(0, 202) then
+                SetNuiFocus(false, false)
+                SendNUIMessage({ type = "forceClose" })
+            end
+        else
+            Citizen.Wait(500)
         end
     end
 end)
