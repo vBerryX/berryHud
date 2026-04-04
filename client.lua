@@ -110,3 +110,46 @@ Citizen.CreateThread(function()
         end
     end
 end)
+
+-- Entfernt das Standard GTA Leben, Rüstung und Geld
+Citizen.CreateThread(function()
+    local minimap = RequestScaleformMovie("minimap")
+    
+    -- Wir zwingen die Karte hier einmalig auf Normalgröße!
+    SetRadarBigmapEnabled(false, false)
+
+    while true do
+        Citizen.Wait(0)
+        
+        -- Versteckt Leben und Rüstung von der GTA Map (3 = Unsichtbar)
+        BeginScaleformMovieMethod(minimap, "SETUP_HEALTH_ARMOUR")
+        ScaleformMovieMethodAddParamInt(3)
+        EndScaleformMovieMethod()
+
+        -- Verstecke weitere störende GTA-Elemente
+        HideHudComponentThisFrame(1)  -- Fahndungssterne
+        HideHudComponentThisFrame(3)  -- GTA Geld
+        HideHudComponentThisFrame(4)  -- GTA MP Geld
+        HideHudComponentThisFrame(7)  -- Gebietsname
+        HideHudComponentThisFrame(9)  -- Straßenname
+        HideHudComponentThisFrame(13) -- Geld-Änderung
+    end
+end)
+
+-- Versteckt das komplette HUD, wenn das Pause-Menü (ESC) offen ist
+Citizen.CreateThread(function()
+    local isPaused = false
+    while true do
+        Citizen.Wait(300) -- Prüft alle 300ms (reicht völlig aus und spart Performance)
+        
+        local currentlyPaused = IsPauseMenuActive()
+        
+        if currentlyPaused and not isPaused then
+            isPaused = true
+            SendNUIMessage({ type = "toggleHUD", show = false })
+        elseif not currentlyPaused and isPaused then
+            isPaused = false
+            SendNUIMessage({ type = "toggleHUD", show = true })
+        end
+    end
+end)

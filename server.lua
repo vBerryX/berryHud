@@ -30,7 +30,7 @@ Citizen.CreateThread(function()
             local current = currentVersion:gsub("%s+", "")
 
             -- DEBUG: Das zeigt dir genau, was das Script vergleicht!
-            --print("^8[DEBUG] Lokal: '" .. current .. "' | GitHub: '" .. latestVersion .. "'^7")
+            print("^8[DEBUG] Lokal: '" .. current .. "' | GitHub: '" .. latestVersion .. "'^7")
 
             if latestVersion ~= current then
                 print("\n^3-------------------------------------------------------------------^7")

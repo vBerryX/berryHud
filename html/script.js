@@ -108,9 +108,23 @@ window.addEventListener('message', function(event) {
         }
         refreshVisibility();
     }
+    // Blendet das gesamte HUD aus, wenn ESC gedrückt wird
+    if (data.type === "toggleHUD") {
+        document.body.style.opacity = data.show ? "1" : "0";
+        document.body.style.transition = "opacity 0.2s ease-in-out"; // Sorgt für ein weiches Ein- und Ausblenden
+    }
 
     if (data.type === "updateStatus") {
         if (document.getElementById('player-id')) document.getElementById('player-id').innerText = data.id;
+
+        // --- NEU: GLITCH EFFEKT LOGIK ---
+        let hudContainer = document.getElementById('hud-container');
+        // Wenn das Leben unter 25 ist (und man nicht komplett tot ist, also > 0)
+        if (data.health < 25 && data.health > 0) {
+            hudContainer.classList.add('critical-health');
+        } else {
+            hudContainer.classList.remove('critical-health');
+        }
 
         ['health', 'armor', 'hunger', 'thirst'].forEach(s => {
             const el = document.getElementById(s + '-prog');
@@ -189,3 +203,4 @@ document.getElementById('close-btn').onclick = () => {
     document.getElementById('config-menu').style.display = "none";
     fetch(`https://${GetParentResourceName()}/closeConfig`, { method: 'POST', body: JSON.stringify({}) });
 };
+
