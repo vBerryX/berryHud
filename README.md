@@ -48,6 +48,8 @@ The config.lua allows you to enforce certain rules. Don't want players to see th
 
 You can also add new languages by simply creating a new file in the locales/ folder and changing Config.Locale in your config.
 
+for support Join my DC Server: https://discord.gg/H8EevXJdgk
+
 🤝 Contributing
 Contributions, issues, and feature requests are welcome!
 Feel free to check the issues page.
