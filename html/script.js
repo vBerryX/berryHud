@@ -117,14 +117,6 @@ window.addEventListener('message', function(event) {
     if (data.type === "updateStatus") {
         if (document.getElementById('player-id')) document.getElementById('player-id').innerText = data.id;
 
-        // --- NEU: GLITCH EFFEKT LOGIK ---
-        let hudContainer = document.getElementById('hud-container');
-        // Wenn das Leben unter 25 ist (und man nicht komplett tot ist, also > 0)
-        if (data.health < 25 && data.health > 0) {
-            hudContainer.classList.add('critical-health');
-        } else {
-            hudContainer.classList.remove('critical-health');
-        }
 
         ['health', 'armor', 'hunger', 'thirst'].forEach(s => {
             const el = document.getElementById(s + '-prog');
