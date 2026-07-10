@@ -1,6 +1,13 @@
 # 🌟 Signal HUD for FiveM (ESX)
 
 A modern, fully self-hosted, highly customizable HUD for FiveM ESX servers. "Signal HUD" replaces smooth progress arcs with a segmented tick-ring look inspired by technical dashboard instrumentation, and ships with zero external CDN dependencies - fonts and icons are bundled with the resource.
+A modern, highly customizable, and lightweight HUD for FiveM ESX servers. Designed with a sleek **Glassmorphism** aesthetic, this HUD keeps the player's screen clean while offering maximum functionality. 
+
+
+![My_HUD Showcase](https://github.com/user-attachments/assets/c0dc536e-cf94-4e90-bd00-3f7ae5e5d24c)
+![My_HUD Showcase](https://github.com/user-attachments/assets/0cb3f103-2d83-4005-a4ad-57baf7d25f34)
+
+
 
 ## ✨ Features
 
