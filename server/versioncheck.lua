@@ -1,3 +1,5 @@
+if not Config.CheckUpdates then return end
+
 -- Get the name of the resource
 local resourceName = GetCurrentResourceName()
 
@@ -29,20 +31,17 @@ Citizen.CreateThread(function()
             local latestVersion = data.version:gsub("%s+", "")
             local current = currentVersion:gsub("%s+", "")
 
-            -- DEBUG: Das zeigt dir genau, was das Script vergleicht!
-            print("^8[DEBUG] Lokal: '" .. current .. "' | GitHub: '" .. latestVersion .. "'^7")
-
             if latestVersion ~= current then
                 print("\n^3-------------------------------------------------------------------^7")
                 print("^1[UPDATE AVAILABLE] ^7- ^5" .. resourceName .. "^7")
                 print("A new update is available on GitHub!")
                 print("Current Version: ^1" .. current .. "^7")
                 print("Latest Version:  ^2" .. latestVersion .. "^7")
-                
+
                 if data.notes then
                     print("Patchnotes: ^6" .. data.notes .. "^7")
                 end
-                
+
                 print("^3Please download the latest version to avoid bugs.^7")
                 print("^3-------------------------------------------------------------------\n^7")
             else

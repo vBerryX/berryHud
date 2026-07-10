@@ -1,0 +1,34 @@
+/* Cyber-Glitch-Effekt bei kritischem Leben (< Config.GlitchThreshold).
+   War bisher nur im README beworben, hier erstmals real implementiert. */
+#glitch-vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 5000;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(255, 20, 60, 0.35) 100%);
+    transition: opacity 0.4s ease;
+}
+
+body.critical-health #glitch-vignette {
+    opacity: 1;
+    animation: vignettePulse 1.8s ease-in-out infinite;
+}
+
+@keyframes vignettePulse {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+}
+
+body.critical-health #ring-health {
+    animation: healthGlitch 2.4s infinite;
+}
+
+@keyframes healthGlitch {
+    0%, 92%, 100% { transform: translate(0, 0); filter: none; }
+    93% { transform: translate(-1.5px, 0.5px); filter: drop-shadow(2px 0 0 rgba(255, 0, 70, 0.7)) drop-shadow(-2px 0 0 rgba(0, 220, 255, 0.6)); }
+    94% { transform: translate(1.5px, -0.5px); filter: drop-shadow(-2px 0 0 rgba(255, 0, 70, 0.7)) drop-shadow(2px 0 0 rgba(0, 220, 255, 0.6)); }
+    95% { transform: translate(-1px, 0); filter: none; }
+    96% { transform: translate(1px, 1px); filter: drop-shadow(2px 0 0 rgba(255, 0, 70, 0.6)); }
+    97%, 100% { transform: translate(0, 0); filter: none; }
+}

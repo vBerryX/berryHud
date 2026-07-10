@@ -1,0 +1,125 @@
+/* Self-hosted Fonts - ersetzt die frühere Google-Fonts-CDN-Abhängigkeit,
+   damit das HUD auch ohne Internetzugriff korrekt aussieht. */
+@font-face {
+    font-family: 'Chakra Petch';
+    src: url('../fonts/chakra-petch-500.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Chakra Petch';
+    src: url('../fonts/chakra-petch-700.woff2') format('woff2');
+    font-weight: 700;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter-400.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter-600.woff2') format('woff2');
+    font-weight: 600;
+    font-display: swap;
+}
+
+:root {
+    /* Fallback-Werte, bis main.js beim ersten Frame die echten Werte aus
+       Config.Colors (Lua) anwendet. Absichtlich NICHT als zweite Quelle der
+       Wahrheit pflegen - config.lua gewinnt immer sobald das Script lädt. */
+    --health-col: #ff2d55; --armor-col: #007aff; --hunger-col: #ff9500; --thirst-col: #5ac8fa;
+    --stamina-col: #ffb347; --oxygen-col: #87ceeb; --cash-col: #4cd964; --bank-col: #00a8ff;
+    --speed-col: #ffffff; --fuel-col: #ffd200;
+
+    /* Eigenständiges Editor-Farbschema - bewusst nicht an eine Gameplay-Stat-Farbe
+       gekoppelt, damit z.B. eine rot eingestellte Rüstungsfarbe nicht den Editor mitfärbt. */
+    --ui-accent: #00e5ff;
+
+    --id-x: 2vw; --id-y: 3vh;
+    --hud-x: 3vw; --hud-y: 95vh;
+    --money-x: 97vw; --money-y: 4vh;
+    --bank-x: 97vw; --bank-y: 10vh;
+    --speedo-x: 97vw; --speedo-y: 95vh;
+    --hud-scale: 1.0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+    color: white;
+    user-select: none;
+    background: transparent;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+body.hud-visible { opacity: 1; }
+
+svg { overflow: visible !important; }
+
+.draggable { position: absolute; pointer-events: none; }
+
+/* Anker-Varianten: bestimmen, welche Ecke der Box an der X/Y-Position sitzt,
+   damit die Position-Slider unabhängig von der Bildschirmseite konsistent bleiben. */
+.anchor-tl { transform-origin: top left; transform: translate(0, 0) scale(var(--hud-scale)); }
+.anchor-tr { transform-origin: top right; transform: translate(-100%, 0) scale(var(--hud-scale)); }
+.anchor-bl { transform-origin: bottom left; transform: translate(0, -100%) scale(var(--hud-scale)); }
+.anchor-br { transform-origin: bottom right; transform: translate(-100%, -100%) scale(var(--hud-scale)); }
+
+#id-tag { left: var(--id-x); top: var(--id-y); }
+#status-cluster-wrap { left: var(--hud-x); top: var(--hud-y); }
+#money-container { left: var(--money-x); top: var(--money-y); }
+#bank-container { left: var(--bank-x); top: var(--bank-y); }
+#speedo-container { left: var(--speedo-x); top: var(--speedo-y); }
+
+/* Player-ID + Voice-Indikator */
+.id-tag-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    background: rgba(10, 12, 15, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.55);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+.id-bracket { color: var(--ui-accent); }
+#player-id { color: #fff; }
+.voice-icon { width: 13px; height: 13px; color: rgba(255, 255, 255, 0.25); transition: color 0.15s, filter 0.15s; }
+.voice-icon.active { color: var(--ui-accent); filter: drop-shadow(0 0 4px var(--ui-accent)); }
+.voice-icon svg { width: 100%; height: 100%; }
+
+/* Geld-/Bank-Badges */
+.status-wrapper, .badge-wrapper { display: flex; align-items: center; gap: 10px; }
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 14px;
+    background: rgba(15, 18, 22, 0.55);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-family: 'Chakra Petch', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+.badge .badge-icon { width: 18px; height: 18px; }
+.badge .badge-icon svg { width: 100%; height: 100%; }
+#money-container .badge { box-shadow: 0 0 16px -6px var(--cash-col); }
+#money-container .badge-icon { color: var(--cash-col); }
+#bank-container .badge { box-shadow: 0 0 16px -6px var(--bank-col); }
+#bank-container .badge-icon { color: var(--bank-col); }
+.badge .currency { font-size: 13px; opacity: 0.6; font-weight: 600; margin-left: 2px; }

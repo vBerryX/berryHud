@@ -1,12 +1,6 @@
-# 🌟 Premium Glassmorphism HUD for FiveM (ESX)
+# 🌟 Signal HUD for FiveM (ESX)
 
-A modern, highly customizable, and lightweight HUD for FiveM ESX servers. Designed with a sleek **Glassmorphism** aesthetic, this HUD keeps the player's screen clean while offering maximum functionality. 
-
-
-![My_HUD Showcase](https://github.com/user-attachments/assets/294bc587-42ea-4729-90b3-9c8f29d3a6cc)
-![My_HUD Showcase](https://github.com/user-attachments/assets/0cb3f103-2d83-4005-a4ad-57baf7d25f34)
-
-
+A modern, fully self-hosted, highly customizable HUD for FiveM ESX servers. "Signal HUD" replaces smooth progress arcs with a segmented tick-ring look inspired by technical dashboard instrumentation, and ships with zero external CDN dependencies - fonts and icons are bundled with the resource.
 
 ## ✨ Features
 
@@ -14,23 +8,46 @@ A modern, highly customizable, and lightweight HUD for FiveM ESX servers. Design
   * Drag & Drop functionality (Adjust X/Y axis via sliders).
   * Scale the UI size perfectly to their monitor.
   * Custom Color Picker for all status rings and money displays.
-  * Toggle specific elements (Money, Bank, Fuel) on or off.
-  * All settings are saved locally for each player.
-* **🔥 Dynamic Status Rings:** * Health, Armor, Hunger, and Thirst.
+  * Toggle specific elements (Cash, Bank, Fuel, Speedo, Stamina, Oxygen) on or off.
+  * All settings are saved locally per player in a single preference blob.
+* **🔥 Segmented Status Rings:** Health, Armor, Hunger, Thirst always shown.
   * **Stamina:** Only appears when the player is sprinting and stamina drops.
   * **Oxygen:** Only appears when the player dives underwater.
-* **💔 Cyber-Glitch Effect:** If a player's health drops below 25%, the HUD container triggers a highly immersive visual glitch/shatter effect to indicate critical health.
-* **🚗 Dynamic Speedometer:** Clean KM/H and fuel display. Automatically hides when stepping out of a vehicle.
+* **💔 Cyber-Glitch Effect:** If a player's health drops below `Config.GlitchThreshold` (default 25%), an RGB-split flicker plays on the health ring plus a pulsing red vignette across the screen.
+* **🚗 Dynamic Speedometer:** KM/H, fuel ring and current gear, automatically hides when stepping out of a vehicle.
+* **🎙️ Voice Indicator:** Lights up next to the player ID tag while talking.
 * **🗺️ Smart Pause Menu:** The entire HUD hides smoothly when the player presses `ESC` to view the pause map.
 * **🌍 Locales System:** Fully translatable (English and German included by default).
-* **📡 Auto Version Checker:** Built-in server script that checks GitHub for updates and prints patch notes directly to your server console.
+* **📡 Auto Version Checker:** Optional (`Config.CheckUpdates`) server script that checks GitHub for updates and prints patch notes to the server console.
 * **🛡️ Clean Screen:** Automatically and cleanly disables the default GTA 5 HUD (minimap health/armor, cash, wanted stars, street names).
+* **📦 No External Dependencies at Runtime:** Fonts (Inter, Chakra Petch) and all icons are bundled as local files - the HUD works correctly even on servers without outbound internet access.
 
 ## 📦 Dependencies
 
 * [es_extended](https://github.com/esx-framework/esx_core) (ESX Legacy or V1.2)
 * `esx_status` (For Hunger & Thirst)
-* *Note: Can easily be converted to QBCore with basic Lua knowledge.*
+
+## 🗂️ File Structure
+
+```
+berryHud/
+├── fxmanifest.lua
+├── config.lua
+├── client/
+│   ├── main.lua        -- ESX init, visibility system, /hud command
+│   ├── hud.lua          -- status/money/speedo loops (with diffing), voice indicator
+│   └── nativehud.lua    -- hides the native GTA HUD
+├── server/
+│   └── versioncheck.lua -- optional GitHub update checker
+├── locales/
+│   ├── en.lua
+│   └── de.lua
+└── html/
+    ├── ui.html
+    ├── css/ (base, rings, editor, glitch)
+    ├── js/ (icons, state, rings, settings, main)
+    └── fonts/ (self-hosted Inter & Chakra Petch, woff2)
+```
 
 ## ⚙️ Installation
 
@@ -38,18 +55,17 @@ A modern, highly customizable, and lightweight HUD for FiveM ESX servers. Design
 2. Extract the folder into your server's `resources` directory and rename it to `berryHud` (or your preferred name).
 3. Open your `server.cfg` and add the following line:
    ensure berryHud
-4. (Optional) Open the config.lua to adjust default colors, scale, language ('en' or 'de'), and global feature toggles.
-5. Restart your server and enjoy! Type /hud in-game to open the editor.
+4. (Optional) Open `config.lua` to adjust default colors, scale, language (`en` or `de`), global feature toggles, the Cyber-Glitch threshold, and the update checker.
+5. Restart your server and enjoy! Type `/hud` in-game to open the editor.
 
+## 🛠️ Configuration for Server Owners
 
+`config.lua` lets you enforce certain rules. Don't want players to see their bank balance? Just set `Config.EnableBank = false` - this removes the bank display from the HUD and the `/hud` editor. `Config.GlitchThreshold` controls at what health percentage the critical-health effect triggers. `Config.CheckUpdates` toggles the GitHub version checker on/off.
 
-🛠️ Configuration for Server Owners
-The config.lua allows you to enforce certain rules. Don't want players to see their bank balance on the street? Just set Config.EnableBank = false. This will completely remove the bank display from the game and the /hud editor.
-
-You can also add new languages by simply creating a new file in the locales/ folder and changing Config.Locale in your config.
+You can add new languages by creating a new file in `locales/` and setting `Config.Locale` accordingly.
 
 for support Join my DC Server: https://discord.gg/H8EevXJdgk
 
-🤝 Contributing
-Contributions, issues, and feature requests are welcome!
-Feel free to check the issues page.
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
