@@ -1,4 +1,4 @@
 {
-  "version": "2.0",
-  "notes": "Signal HUD rework: segmented ring design, self-hosted fonts/icons, diffed NUI updates, voice + gear indicator, real Cyber-Glitch effect"
+  "version": "3.0",
+  "notes": "Signal HUD v3.0: reworked UI/HUD visibility handling, HUD only loads once the player is fully in the world, hides on the pause map, bilingual (DE/EN) README"
 }
