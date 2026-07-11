@@ -1,4 +1,4 @@
 {
-  "version": "3.0",
-  "notes": "Signal HUD v3.0: reworked UI/HUD visibility handling, HUD only loads once the player is fully in the world, hides on the pause map, bilingual (DE/EN) README"
+  "version": "3.0.1",
+  "notes": "berryHUD v3.0.1: removed the dark background/border pill behind the cash and bank badges"
 }
